@@ -96,6 +96,7 @@ class LineZoneAnnotator:
             text_scale (float): The scale of the text that will be drawn.
             text_offset (float): The offset of the text that will be drawn.
             text_padding (int): The padding of the text that will be drawn.
+            display_out: (bool): Toggle the out box being shown or not.
 
         """
         self.thickness: float = thickness
@@ -172,7 +173,7 @@ class LineZoneAnnotator:
         )
         in_text_y = int(
             (line_counter.vector.end.y + line_counter.vector.start.y + in_text_height)
-            / 2
+            / 4
             - self.text_offset * in_text_height
         )
 
