@@ -39,7 +39,7 @@ class BoundingBoxAnnotator(BaseAnnotator):
         self.thickness: int = thickness
         self.color_map: ColorMap = ColorMap(color_map)
 
-    def annotate(self, scene: np.ndarray, detections: Detections) -> np.ndarray:
+    def annotate(self, scene: np.ndarray, detections: Detections, custom_color: tuple = None) -> np.ndarray:
         """
         Annotates the given scene with bounding boxes based on the provided detections.
 
@@ -69,12 +69,15 @@ class BoundingBoxAnnotator(BaseAnnotator):
         """
         for detection_idx in range(len(detections)):
             x1, y1, x2, y2 = detections.xyxy[detection_idx].astype(int)
-            idx = resolve_color_idx(
-                detections=detections,
-                detection_idx=detection_idx,
-                color_map=self.color_map,
-            )
-            color = resolve_color(color=self.color, idx=idx)
+            if custom_color is not None:
+                color = Color(*custom_color)
+            else:
+                idx = resolve_color_idx(
+                    detections=detections,
+                    detection_idx=detection_idx,
+                    color_map=self.color_map,
+                )
+                color = resolve_color(color=self.color, idx=idx)
             cv2.rectangle(
                 img=scene,
                 pt1=(x1, y1),
