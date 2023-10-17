@@ -46,7 +46,7 @@ class BoxAnnotator:
         detections: Detections,
         labels: Optional[List[str]] = None,
         skip_label: bool = False,
-        custom_color: Optional[tuple] = None,
+        custom_colors: Optional[List[tuple]] = None,
     ) -> np.ndarray:
         """
         Draws bounding boxes on the frame using the detections provided.
@@ -91,9 +91,10 @@ class BoxAnnotator:
             )
             idx = class_id if class_id is not None else i
 
-            if custom_color is not None: 
-                color = Color(*custom_color)
-            else:
+            color = None
+            if custom_colors and i < len(custom_colors):
+                color = Color(*custom_colors[i])
+            elif custom_colors is None:
                 color = (
                     self.color.by_idx(idx)
                     if isinstance(self.color, ColorPalette)
