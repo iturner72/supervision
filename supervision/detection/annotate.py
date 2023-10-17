@@ -46,6 +46,7 @@ class BoxAnnotator:
         detections: Detections,
         labels: Optional[List[str]] = None,
         skip_label: bool = False,
+        custom_color: Optional[tuple] = None,
     ) -> np.ndarray:
         """
         Draws bounding boxes on the frame using the detections provided.
@@ -89,11 +90,16 @@ class BoxAnnotator:
                 detections.class_id[i] if detections.class_id is not None else None
             )
             idx = class_id if class_id is not None else i
-            color = (
-                self.color.by_idx(idx)
-                if isinstance(self.color, ColorPalette)
-                else self.color
-            )
+
+            if custom_color is not None: 
+                color = Color(*custom_color)
+            else:
+                color = (
+                    self.color.by_idx(idx)
+                    if isinstance(self.color, ColorPalette)
+                    else self.color
+                )
+
             cv2.rectangle(
                 img=scene,
                 pt1=(x1, y1),
